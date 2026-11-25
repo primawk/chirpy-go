@@ -6,12 +6,17 @@ import (
 )
 
 func (cfg *apiConfig) handlerHit(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 
-	body := fmt.Sprintf("Hits: %d", (int(cfg.fileserverHits.Load())))
+	htmlBody := fmt.Sprintf(`<html>
+  <body>
+    <h1>Welcome, Chirpy Admin</h1>
+    <p>Chirpy has been visited %d times!</p>
+  </body>
+	</html>`, cfg.fileserverHits.Load())
 
-	_, err := w.Write([]byte(body))
+	_, err := w.Write([]byte(htmlBody))
 	if err != nil {
 		fmt.Println("error getting the metrics information:", err)
 	}
