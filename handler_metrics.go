@@ -22,9 +22,9 @@ func (cfg *apiConfig) handlerHit(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (cfg *apiConfig) handlerReset(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-
-	cfg.fileserverHits.Store(0)
-}
+// func (cfg *apiConfig) handlerReset(w http.ResponseWriter, req *http.Request) {
+// 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+// 	w.WriteHeader(http.StatusOK)
+//
+// 	cfg.fileserverHits.Store(0)
+// }
