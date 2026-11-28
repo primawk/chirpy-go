@@ -14,8 +14,9 @@ type returnCleaned struct {
 	Cleaned_body string `json:"cleaned_body"`
 }
 
-type reqEmail struct {
-	Email string `json:"email"`
+type reqEmailPass struct {
+	Password string `json:"password"`
+	Email    string `json:"email"`
 }
 
 type User struct {

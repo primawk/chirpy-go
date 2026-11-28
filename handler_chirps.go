@@ -51,3 +51,56 @@ func (cfg *apiConfig) handlerCreateChirp(w http.ResponseWriter, req *http.Reques
 
 	respondWithJSON(w, http.StatusCreated, chirpCreated)
 }
+
+func (cfg *apiConfig) handlerFetchChirps(w http.ResponseWriter, req *http.Request) {
+	chirps, err := cfg.db.GetChirps(req.Context())
+
+	if err != nil {
+		content := fmt.Sprintf("Error fetching chirps: %s", err)
+		respondWithError(w, http.StatusInternalServerError, content)
+		return
+	}
+
+	var result []Chirp
+
+	for _, chirp := range chirps {
+		chirpJson := Chirp{
+			ID:        chirp.ID,
+			CreatedAt: chirp.CreatedAt,
+			UpdatedAt: chirp.UpdatedAt,
+			Body:      chirp.Body,
+			UserID:    chirp.UserID,
+		}
+		result = append(result, chirpJson)
+	}
+
+	respondWithJSON(w, http.StatusOK, result)
+}
+
+func (cfg *apiConfig) handlerFetchChirp(w http.ResponseWriter, req *http.Request) {
+	chirpId, err := uuid.Parse(req.PathValue("chirpID"))
+
+	if err != nil {
+		content := fmt.Sprintf("Error getting the chirp id: %s", err)
+		respondWithError(w, http.StatusBadRequest, content)
+		return
+	}
+
+	chirp, err := cfg.db.GetChirp(req.Context(), chirpId)
+
+	if err != nil {
+		content := fmt.Sprintf("Error fetching chirp: %s", err)
+		respondWithError(w, http.StatusNotFound, content)
+		return
+	}
+
+	result := Chirp{
+		ID:        chirp.ID,
+		CreatedAt: chirp.CreatedAt,
+		UpdatedAt: chirp.UpdatedAt,
+		Body:      chirp.Body,
+		UserID:    chirp.UserID,
+	}
+
+	respondWithJSON(w, http.StatusOK, result)
+}
